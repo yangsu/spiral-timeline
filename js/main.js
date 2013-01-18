@@ -153,7 +153,7 @@ var init = _.once(function() {
   scene.add(camera);
 
   // create a camera contol
-  cameraControls = new THREE.TrackballControls(camera);
+  cameraControls = new THREE.TrackballControls(camera, renderer.domElement);
 
   // transparently support window resize
   THREEx.WindowResize.bind(renderer, camera);
