@@ -26,8 +26,19 @@ THREE.HelixCurve = THREE.Curve.create(function() {},
 THREE.Tube = function(path) {
   this.geometry = new THREE.Geometry();
 
+  // this.geometry.verticesNeedUpdate = true;
+  // this.geometry.elementsNeedUpdate = true;
+  // this.geometry.morphTargetsNeedUpdate = true;
+  // this.geometry.uvsNeedUpdate = true;
+  // this.geometry.normalsNeedUpdate = true;
+  // this.geometry.colorsNeedUpdate = true;
+  // this.geometry.tangentsNeedUpdate = true;
+  this.geometry.dynamic = true;
+
+
   this.grid = new Array(config.lengthSegments);
-  this.path = path;
+
+  this.path = new THREE.HelixCurve();
 
   var tang = new THREE.Vector3();
   var binormal = new THREE.Vector3();
@@ -120,6 +131,11 @@ THREE.Tube = function(path) {
   return this;
 };
 
+THREE.Tube.prototype.rebuild = function() {
+
+
+};
+
 THREE.Tube.prototype.vert = function(x, y, z) {
   return this.geometry.vertices.push(new THREE.Vertex(new THREE.Vector3(x, y, z))) - 1;
 };
@@ -168,7 +184,7 @@ var init = _.once(function() {
   var light = new THREE.AmbientLight(Math.random() * 0xffffff);
   scene.add(light);
 
-  var tube = new THREE.Tube(new THREE.HelixCurve());
+  var tube = new THREE.Tube();
 
   // var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, [new THREE.MeshNormalMaterial(), new THREE.MeshNormalMaterial()]);
   var material = new THREE.MeshNormalMaterial();
@@ -178,12 +194,14 @@ var init = _.once(function() {
   mesh.scale.set(1, 1, 1);
   scene.add(mesh);
 
-
   var gui = new dat.GUI();
 
-  gui.add(config, 'radius', 1, 100);
-  gui.add(config, 'height', 1, 200);
+  var rebuild = function() {
+    tube.rebuild();
+  };
 
+  gui.add(config, 'radius', 1, 100).onChange(rebuild);
+  gui.add(config, 'height', 1, 200).onChange(rebuild);
 });
 
 function animate() {
