@@ -1,10 +1,7 @@
 var stats, scene, renderer, composer;
 var camera, cameraControl;
 
-// init the scene
-
-function init() {
-
+var init = _.once(function() {
   if (Detector.webgl) {
     renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -55,9 +52,10 @@ function init() {
   var mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
-}
+  var receiver = {};
+  var gui = new dat.GUI();
 
-// animation loop
+});
 
 function animate() {
 
@@ -73,8 +71,6 @@ function animate() {
   stats.update();
 }
 
-// render the scene
-
 function render() {
   // variable which is increase by Math.PI every seconds - usefull for animation
   var PIseconds = Date.now() * Math.PI;
@@ -86,5 +82,7 @@ function render() {
   renderer.render(scene, camera);
 }
 
-init();
-animate();
+$(function() {
+  init();
+  animate();
+});
