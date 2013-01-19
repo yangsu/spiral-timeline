@@ -86,5 +86,16 @@ function onFrame(event) {
   }
 }
 
+function onMouseMove(event) {
+  for (var i = 0, len = dataCircles.length; i < len; i += 1) {
+    var c = dataCircles[i];
+    if (c.hitTest(event.point)) {
+      c.fillColor = '#FFF';
+    } else {
+      c.fillColor = config.dataPointColor;
+    }
+  }
+}
+
 
 paper.install(window.paperscript)
