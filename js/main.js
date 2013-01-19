@@ -1,14 +1,14 @@
 var config = {
-  radius: 2,
-  tubeRadius: 0.01,
-
-  height: 0,
+  radius: 100,
 
   lengthSegments: 500,
-  radialSegments: 50,
 
-  revolutions: 1
+  revolutions: 5,
+
+  markers: [ 50, 100, 200, 400, 800 ]
 };
+
+var paperscript = {};
 
 var $paper;
 
@@ -22,6 +22,16 @@ var updateCanvasSize = function() {
 $(function() {
   $paper = $('#paper');
   updateCanvasSize();
+
+
+  var gui = new dat.GUI();
+  var onChange = function(value) {
+    paperscript.draw()
+  };
+  gui.add(config, 'revolutions', 1, 10).onChange(onChange);
+  gui.add(config, 'lengthSegments', 100, 1000).onChange(onChange);
+  gui.add(config, 'radius', 10, 1000).onChange(onChange);
 });
 
 $(window).resize(updateCanvasSize);
+
