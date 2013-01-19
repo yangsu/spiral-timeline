@@ -16,6 +16,9 @@ path.closed = false;
 // Select the path, so we can see its handles:
 // path.fullySelected = true;
 
+var dataPoints = [];
+var dataCircles = [];
+
 var step = config.revolutions * 2 * Math.PI/config.lengthSegments;
 
 for (var i = 0, t = 0; i < config.lengthSegments; i++, t += step) {
@@ -46,16 +49,41 @@ this.draw = function draw() {
     p.y = cy + Math.cos(t + config.phase) * r;
   }
 
+  for (var j = 0, len = dataPoints.length; j < len; j += 1) {
+    var ii = dataPoints[j];
+    var p = path.segments[ii].point;
+    var c = dataCircles[j];
+    c.position.x = p.x;
+    c.position.y = p.y;
+  }
+
 }
 
 function onFrame(event) {
-  // if (config.animate) {
+  if (config.animate) {
     draw();
     config.phase = (config.phase + config.rotation) % (Math.PI * 2)
     path.smooth();
 
     config.lengthSegments += config.growth;
-  // }
+  }
+
+  dataPoints = dataPoints.map(function (v) {
+    return v + 1;
+  });
+
+  if (Math.random() <= 0.02) {
+    dataPoints.push(0);
+    var r = Math.pow(Math.E, -1) * config.radius;
+    var x = cx + Math.sin(config.phase) * r;
+    var y = cy + Math.cos(config.phase) * r;
+
+    var c = new Path.Circle(new Size(x, y), config.dataPointSize);
+    c.strokeColor = config.dataPointColor;
+    c.strokeColor.alpha = 0.5;
+    c.fillColor = config.dataPointColor;
+    dataCircles.push(c);
+  }
 }
 
 
