@@ -32,10 +32,10 @@ this.draw = function draw() {
   var step = config.revolutions * 2 * Math.PI/config.lengthSegments;
 
   for (var i = 0, t = 0; i < config.lengthSegments; i++, t += step) {
-    var r = i / config.lengthSegments * config.radius;
+    var r = (Math.pow(Math.E, -config.decay * i / config.lengthSegments) - 1) * config.radius;
     var p = path.segments[i].point;
-    p.x = cx + Math.sin(t) * r;
-    p.y = cy + Math.cos(t) * r;
+    p.x = cx + Math.sin(t + config.phase) * r;
+    p.y = cy + Math.cos(t + config.phase) * r;
   }
 
 }
