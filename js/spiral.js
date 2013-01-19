@@ -19,7 +19,7 @@ path.closed = false;
 var step = config.revolutions * 2 * Math.PI/config.lengthSegments;
 
 for (var i = 0, t = 0; i < config.lengthSegments; i++, t += step) {
-  var r = i / config.lengthSegments * config.radius;
+  var r = (Math.pow(Math.E, -config.decay * i / config.constSegments) - 1) * config.radius;
   var x = cx + Math.sin(t) * r;
   var y = cy + Math.cos(t) * r;
 
@@ -29,10 +29,18 @@ for (var i = 0, t = 0; i < config.lengthSegments; i++, t += step) {
 
 this.draw = function draw() {
 
-  var step = config.revolutions * 2 * Math.PI/config.lengthSegments;
+  // var step = config.revolutions * 2 * Math.PI/config.lengthSegments;
+  var step = 2 * Math.PI/config.constSegments;
+
+  while (path.segments.length <= config.lengthSegments) {
+    var r = (Math.pow(Math.E, -config.decay * i / config.constSegments) - 1) * config.radius;
+    var x = cx + Math.sin(t) * r;
+    var y = cy + Math.cos(t) * r;
+    path.add(new Point(x, y));
+  }
 
   for (var i = 0, t = 0; i < config.lengthSegments; i++, t += step) {
-    var r = (Math.pow(Math.E, -config.decay * i / config.lengthSegments) - 1) * config.radius;
+    var r = (Math.pow(Math.E, -config.decay * i / config.constSegments) - 1) * config.radius;
     var p = path.segments[i].point;
     p.x = cx + Math.sin(t + config.phase) * r;
     p.y = cy + Math.cos(t + config.phase) * r;
@@ -41,8 +49,13 @@ this.draw = function draw() {
 }
 
 function onFrame(event) {
-  draw();
-  path.smooth();
+  // if (config.animate) {
+    draw();
+    config.phase = (config.phase + config.rotation) % (Math.PI * 2)
+    path.smooth();
+
+    config.lengthSegments += config.growth;
+  // }
 }
 
 

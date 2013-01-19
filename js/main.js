@@ -1,10 +1,16 @@
 var config = {
-  radius: 100,
+  animate: true,
+
+  lengthSegments: 0,
+  constSegments: 500,
+  growth: 1,
   phase: 0,
-  lengthSegments: 500,
+
+
+  radius: 200,
   decay: 1,
 
-
+  rotation: 0,
   revolutions: 5,
 
   markers: [ 50, 100, 200, 400, 800 ]
@@ -30,11 +36,14 @@ $(function() {
   var onChange = function(value) {
     paperscript.draw()
   };
-  gui.add(config, 'revolutions', 1, 10).onChange(onChange);
-  gui.add(config, 'lengthSegments', 100, 1000).onChange(onChange);
+
+  gui.add(config, 'animate', true).onChange(onChange);
+  // gui.add(config, 'revolutions', 1, 10).onChange(onChange);
+  gui.add(config, 'growth', 1, 10).onChange(onChange);
+  gui.add(config, 'constSegments', 100, 1000).onChange(onChange);
   gui.add(config, 'radius', 10, 1000).onChange(onChange);
-  gui.add(config, 'decay', 0, 10).onChange(onChange);
-  // gui.add(config, 'phase', 0, 2 * Math.PI).step(Math.PI/8).onChange(onChange);
+  gui.add(config, 'decay', 0, 2).onChange(onChange);
+  gui.add(config, 'rotation').min(-Math.PI/2).max(Math.PI/2).step(Math.PI/128).onChange(onChange);
 });
 
 $(window).resize(updateCanvasSize);
